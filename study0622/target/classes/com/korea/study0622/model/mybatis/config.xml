@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+<typeAliases>
+	<typeAlias type="com.korea.study0622.model.domain.Member" alias="Member"/>
+	<typeAlias type="com.korea.study0622.model.domain.Board" alias="Board"/>
+	<typeAlias type="com.korea.study0622.model.domain.News" alias="News"/>
+</typeAliases>
+  <environments default="development">
+    <environment id="development">
+      <transactionManager type="JDBC"/>
+      <dataSource type="POOLED">
+        <property name="driver" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3307/javase?characterEncoding=utf-8"/>
+        <property name="username" value="root"/>
+        <property name="password" value="1234"/>
+      </dataSource>
+    </environment>
+  </environments>
+  <mappers>
+    <mapper resource="com/korea/study0622/model/mybatis/MemberMapper.xml"/>
+    <mapper resource="com/korea/study0622/model/mybatis/BoardMapper.xml"/>
+    <mapper resource="com/korea/study0622/model/mybatis/NewsMapper.xml"/>
+  </mappers>
+</configuration>
