@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Store">
+
+	<insert id="insert" parameterType="Store">
+		insert into store(store_id,addr1,title,content,mapx ,mapy ,firstimage) 
+		values(seq_store.nextval,#{addr1},#{title},#{content},#{mapx},#{mapy},#{firstimage})
+	</insert>
+	
+	<select id="selectAll" resultType="Store">
+		select * from store
+	</select>
+	
+	<select id="getLastId" resultType="int">
+		select seq_store.currval from dual
+	</select>
+	
+	<select id="getLastStore" resultType="Store" parameterType="int">
+		select * from store where store_id=#{store_id}
+	</select>
+	
+	<delete id="delete" parameterType="int">
+		delete from store where store_id=#{store_id}
+	</delete>
+	
+	<select id="select" parameterType="int" resultType="Store">
+		select * from store where store_id=#{store_id}
+	</select>
+</mapper>
