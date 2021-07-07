@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<!-- 
+	스프링에 MVC에서는 컨트롤러 매핑(어떤 동생이 일할지를 결정짓는 과정)분석을 형님 컨트롤러가 직접 하지않고,
+	전담 조사객체가 별도로 존재 HandlerMapping
+	만일 개발자가 전담 조사자인 HandlerMapping을 걸정짓지 않을 경우 디폴트 핸들러 매핑이 지정된다..
+	DefaultAnnotationHandlerMapping(@어노테이션을 이용한 동생 컨트롤러 검색) -->
+	
+	<!-- DAO등록 -->
+	<bean class="com.koreait.springmvctest.model.board.dao.MybatisBoardDAO" id="mybatisBoardDAO"></bean>
+	
+	
+	<!-- simpleurlhandlermapping 객체는 어떤 요청 url에 어떤 하위 컨트롤러가 동작할지를 map방식으로 연결하는 객체 -->
+	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="alwaysUseFullPath" value="true"></property>
+		<property name="mappings">
+			<props>
+				<prop key="/board/list">listController</prop>
+				<prop key="/board/regist">registController</prop>
+				<prop key="/board/update">updateController</prop>
+				<prop key="/board/delete">deleteController</prop>
+				<prop key="/board/detail">detailController</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<!-- DI를 이용하여 DAO를 컨트롤러에 주입 -->
+	<bean class="com.koreait.springmvctest.controller.ListController" name="listController">
+		<property name="boardDAO" ref="mybatisBoardDAO"></property>
+	</bean>
+	<bean class="com.koreait.springmvctest.controller.DetailController" name="detailController"></bean>
+	<bean class="com.koreait.springmvctest.controller.RegistController" name="registController"></bean>
+	<bean class="com.koreait.springmvctest.controller.UpdateController" name="updateController"></bean>
+	<bean class="com.koreait.springmvctest.controller.DeleteController" name="deleteController"></bean>
+	
+	<!-- 뷰 매핑
+		접두어와 접미어를 제외한 나머지 단어를 키 값으로 사용하는 전담 해석지
+	 -->
+	 <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" id="viewResolver">
+	 	<property name="prefix" value="/"/>
+	 	<property name="suffix" value=".jsp"/>
+	 </bean>
+
+</beans>
