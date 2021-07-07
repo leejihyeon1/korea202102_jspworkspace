@@ -1,0 +1,25 @@
+  
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+
+	<!-- 공통으로 사용할 코드 등록 -->
+	<bean class="springbasic.aop.Bell" id="bell"></bean>
+	
+	<!-- 위에서 명시된 공통코드인 aspect를 어느시점(학생의 메서드 직전), 어느 지점(student클래스의 모든 메서드)에서 동작할지 서술 -->
+	<aop:config>
+		<aop:aspect ref="bell" id="bellAspect">
+			<aop:pointcut expression="execution(public * springbasic.aop..*(..))" id="bellPointcut"/>
+			<aop:before method="sound" pointcut-ref="bellPointcut"/>
+		</aop:aspect>
+	</aop:config>
+	
+	<!-- 학생 클래스 등록 -->
+	<bean class="springbasic.aop.Student" id="student"></bean>
+	
+	<!-- 군인 클래스 등록 -->
+	<bean class="springbasic.aop.Soldier" id="soldier"></bean>
+</beans>

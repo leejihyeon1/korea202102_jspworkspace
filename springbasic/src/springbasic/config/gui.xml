@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- MyFrame 에 사용할 컴포넌트들 생성 및 관계 설정 -->
+	<bean class="javax.swing.JTextField" id="t1">
+		<constructor-arg type="int" value="20"/>
+	</bean>		
+	
+	<bean class="javax.swing.JPasswordField" id="t2">
+		<constructor-arg type="int" value="20"/>
+	</bean>		
+
+	<bean class="javax.swing.JTextField" id="t3">
+		<constructor-arg type="int" value="20"/>
+	</bean>
+			
+	<bean class="javax.swing.JButton" id="t4">
+		<constructor-arg value="등록"/>
+	</bean>
+			
+	<!-- 객체간 관계를 명시하는 과정을 weaving(엮는다) -->
+	<bean class="springbasic.gui.MyFrame" id="myFrame">
+		<property name="t_id" ref="t1"/>		
+		<property name="t_pass" ref="t2"/>		
+		<property name="t_name" ref="t3"/>		
+		<property name="bt" ref="t4"/>		
+	</bean>
+	
+</beans>

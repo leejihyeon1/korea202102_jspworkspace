@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+	<!--  객체간 결합도를 낮추기 위해, 자바 코드안에서 객체 생성을 하는 것이 아니라
+			이 xml을 통해 객체 생성과, 객체와 객체간의 관계까지 명시할 수 있다-->
+			
+	<bean class="springbasic.cook.Fripan" id="fripan"></bean>
+	<bean class="springbasic.cook.ElectPan" id="electPan"></bean>
+	
+	<!-- 위의 프라이팬 2개를 필요로 하는 객체에 위 프라이팬을 대신 넣어주ㄱ자(injection) -->
+	<bean class="springbasic.cook.Chef" id="chef">
+		<property name="pan" ref="fripan"></property>
+	</bean>
+	
+
+</beans>
