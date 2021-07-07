@@ -1,0 +1,33 @@
+#web.xml에서 하나씩 다 매핑하지 않고 통일시킨 후 들어온 값에 맞는 매핑 실행
+#컨트롤러 매핑
+/blood.do=com.koreait.model2app.controller.blood.BloodController
+/movie.do=com.koreait.model2app.controller.movie.MovieController
+
+#게시판 관련 컨트롤러 매핑
+/board/list.do=com.koreait.model2app.controller.board.ListController
+/board/regist.do=com.koreait.model2app.controller.board.RegistController
+/board/detail.do=com.koreait.model2app.controller.board.DetailController
+/board/edit.do=com.koreait.model2app.controller.board.EditController
+
+#회원 관련 컨트롤러 매핑
+/member/regist.do=com.koreait.model2app.controller.member.RegistController
+/member/list.do=com.koreait.model2app.controller.member.ListController
+/member/detail.do=com.koreait.model2app.controller.member.DetailController
+
+#뷰 매핑
+/blood/result=/blood/result.jsp
+/movie/result=/movie/result.jsp
+
+#게시판 관련 뷰 매핑
+/result/board/list=/board/list.jsp
+/result/board/regist=/board/list.do
+/result/board/detail=/board/detail.jsp
+/result/board/edit=/board/detail.do
+
+
+#회원 관련 뷰매핑
+/result/member/regist=/member/list.do
+/result/member/list=/member/list.jsp
+
+#에러 관련 뷰 매핑
+/result/error=/error/result.jsp
