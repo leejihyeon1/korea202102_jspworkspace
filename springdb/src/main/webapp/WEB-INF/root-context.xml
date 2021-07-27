@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	
+	<!-- 여기에 있는 빈들은 공통으로 사용함 (client랑 admin이랑) -->
+	<!-- 데이터 소스 선택 -->
+	<jee:jndi-lookup jndi-name="jndi/oracle"
+		id="dataSource" resource-ref="true"></jee:jndi-lookup>
+
+	<!-- 각 기술에 알맞는 트랜잭션 매니저 선택 mybaits, jdbc : DataSourceTransactionManager 
+		hibernate : HibernateTransactionManager -->
+	<bean
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+		id="dataSourceTransactionManager" p:dataSource-ref="dataSource"></bean>
+
+	<!-- mybatis관련 설정 -->
+	<bean class="org.mybatis.spring.SqlSessionFactoryBean"
+		id="sqlSessionFactoryBean" p:dataSource-ref="dataSource"
+		p:configLocation="classpath:/com/koreait/springdb/mybatis/config.xml"></bean>
+
+	<bean class="org.mybatis.spring.SqlSessionTemplate"
+		id="sqlSessionTemplate">
+		<constructor-arg ref="sqlSessionFactoryBean"></constructor-arg>
+	</bean>
+
+	<!-- 모델(service,dao) -->
+	<context:component-scan base-package="com.koreait.springdb.model"></context:component-scan>
+	
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+		id="viewResolver" p:prefix="/" p:suffix=".jsp"></bean>
+</beans>
