@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- 어떤 요청에 어떤 동생 컨트롤러가 일할지(컨트롤러 매핑) -->
+	<bean
+		class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="alwaysUseFullPath" value="true"></property>
+
+		<!-- url에 어떤 클래스가 요청을 처리할지 매핑(map방식으로) -->
+		<property name="mappings">
+			<props>
+				<prop key="/board/list">listController</prop>
+				<prop key="/board/detail">detailController</prop>
+				<prop key="/board/update">updateController</prop>
+				<!-- 
+				<prop key="/board/regist"></prop>
+				<prop key="/board/delete"></prop>
+				 -->
+			</props>
+		</property>
+	</bean>
+	
+	<!-- 모델 객체 등록 -->
+	<bean class="com.koreait.springmvc0707.model.mybatis.MybatisConfigManager" 
+	id="mybatisConfigManager" factory-method="getInstance"></bean>
+	
+	<bean class="com.koreait.springmvc0707.model.board.service.MybatisBoardDAO" id="mybatisBoardDAO">
+		<property name="configManager" ref="mybatisConfigManager"></property>
+	</bean>
+	
+	<bean class="com.koreait.springmvc0707.model.board.service.BoardServiceImpl" id="boardServiceImpl">
+		<property name="boardDAO" ref="mybatisBoardDAO"></property>
+	</bean>
+	
+	
+	<!-- 컨트롤러 등록 -->
+	<bean class="com.koreait.springmvc0707.controller.board.ListController" name="listController">
+		<property name="boardService" ref="boardServiceImpl"></property>
+	</bean>
+	
+	<bean class="com.koreait.springmvc0707.controller.board.DetailController" name="detailController">
+		<property name="boardService" ref="boardServiceImpl"></property>
+	</bean>
+	
+	<bean class="com.koreait.springmvc0707.controller.board.UpdateController" name="updateController">
+		<property name="boardService" ref="boardServiceImpl"></property>
+	</bean>
+	<!-- 어떤 페이지를 뷰 페이지로 지정할지 (뷰 매핑) 
+	InternalResourceViewResolver는 컨트롤러가 반환한 키 값을 접두어 + 접미어를 이용하여 풀 페이지로 해석한다-->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" id="viewResolver">
+		<property name="prefix" value="/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+
+</beans>

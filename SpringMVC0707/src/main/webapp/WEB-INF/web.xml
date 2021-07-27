@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
+  <display-name>SpringMVC0707</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  
+  <!-- 필터 등록
+  Filter란? 서블릿이 요청을 처리하기 보다도 아서, 요청을 먼저 만나 전처리가 가능한 객체이다!!
+  			  주로 공통적으로 처리할 전처리 로직이 있을 때 필터를 이용할 수 있다..우리의 경우 모든 요청에 대해 인코딩을 처리해보자 -->
+  
+  <filter>
+  	<filter-name>encodingFilter</filter-name>
+  	<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+  	<init-param>
+  		<param-name>encoding</param-name><!-- 파라미터명은 정해져 있는거임! -->
+  		<param-value>UTF-8</param-value>
+  	</init-param>
+  </filter>
+  <filter-mapping>
+  	<filter-name>encodingFilter</filter-name>
+  	<url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <!-- 서블릿 매핑 -->
+  <servlet>
+  	<servlet-name>babo</servlet-name>
+  	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+  	<!--  개발자가 스프링 설정 파일명을 별도로 명시하지 않으면 스프링 자체적으로 파일명을 만들되 다음과 같은 규칙으로 생성한다 
+  			서블릿 이름-servlet.xml-->
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>babo</servlet-name>
+  	<url-pattern>/</url-pattern>
+  </servlet-mapping>
+</web-app>

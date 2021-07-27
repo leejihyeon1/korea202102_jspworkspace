@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<!-- 기존의 빈을 일일이 등록하는 방식은 너무 많은 코드가 소요되므로, 가급적 빈 등록을 최소화하여 개발하는 방법 -->
+	
+	<!-- 앞으로는 스프링이 지원하는 데이터연동 기술을 사용하기 때문에, DB 커넥션등은 우리가 직접 취득해서는 안되며 
+	스프링에게 주도권을 넘겨주자 그래야, 이 커넥션으로 트랜잭션 등을 지원받을 수 있다 -->
+	
+	<!-- JNDI로부터 datasource 얻어오기 -->
+	<jee:jndi-lookup
+		id="dataSource" 
+		jndi-name="jndi/oracle"  
+		resource-ref="true"/> 
+	
+	<!-- 
+		개발자는 자신이 사용할 데이터베이스 연동 기술을 선택해서 등록해야 한다
+		아래의 기술에 따라 트랜잭션 구현 객체가 결정되므로... 
+		JDBC : DataSourceTransactionManager 객체가 트랜잭션 처리 
+		Mybatis : DataSourceTransactionManager 객체가 트랜잭션 처리
+		Hibernate : HibernateTransactionManager 객체가 트랜잭션 처리...
+		등등.. 
+	 -->
+	<bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager" 
+		id="dataSourceTransactionManager" 
+		p:dataSource-ref="dataSource"/>	 	
+		
+	
+	<!-- SqlSession을 얻을 수 있는 팩토리인 SqlSessionFactory를 등록해야 함. 근데 스프링에서는 이  팩토리가 명칭이 바뀜..mybatis 팀에서 바꾼거임 -->		
+	<bean class="org.mybatis.spring.SqlSessionFactoryBean" 
+		id="sqlSessionFactoryBean"
+		p:dataSource-ref="dataSource"
+		p:configLocation="classpath:com/koreait/springmvc0715/model/mybatis/config.xml"/>		
+	
+	<!-- DAO에게 주입할 SqlSessionTemplate을 등록 -->
+	<bean class="org.mybatis.spring.SqlSessionTemplate" id="sqlSessionTemplate">
+		<constructor-arg ref="sqlSessionFactoryBean"/>
+	</bean>
+	
+	
+	<!-- 핸들러 매핑 결정짓기 
+	핸들러 매핑 중,  DefaultAnnotationHandlerMapping은 디폴트이기 때문에 개발자가 명시하지 않으면, 이 핸들러매핑이 기본적으로 적용이 된다!!
+	
+	이 핸들러매핑은 어떤 요청에 어떤 동생 하위 컨트롤러가 일할지 여부를 , 해당 클래스의 어노테이션을 분석하여 결정짓는다..따라서  xml 이용하지 않음..
+	-->
+	
+	<!-- 컨트롤러에 대한 일괄 처리 -->
+	<context:component-scan base-package="com.koreait.springmvc0715"/>
+		
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" id="viewResolver" 
+		p:prefix="/"
+		p:suffix=".jsp"/>	
+	
+
+</beans>

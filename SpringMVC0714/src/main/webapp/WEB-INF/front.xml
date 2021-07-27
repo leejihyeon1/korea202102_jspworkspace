@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- MybatisConfigManager 등록 : 싱글턴 메서드 호출 -->
+	<bean class="com.koreait.springmvc0714.model.mybatis.MybatisConfigManager" 
+	id="mybatisConfigManager"
+	factory-method="getInstance"/>
+	
+	<!-- 사용할 모델 파트의 객체들 등록(service,DAO) -->
+	<bean class="com.koreait.springmvc0714.model.board.service.MybatisBoardDAO" 
+	id="mybatisBoardDAO">
+		<property name="configManager" ref="mybatisConfigManager"></property>
+	</bean>
+	
+	<bean class="com.koreait.springmvc0714.model.board.service.BoardServiceImpl" 
+	id="boardServiceImpl">
+		<property name="boardDAO" ref="mybatisBoardDAO"></property>
+	</bean>
+	
+	<!-- 사용할 컨트롤러 등록 -->
+	<bean class="com.koreait.springmvc0714.controller.board.ListController" 
+	name="listController"
+	p:boardService-ref="boardServiceImpl"></bean>
+	
+	<bean class="com.koreait.springmvc0714.controller.board.RegistController"
+	name="registController"
+	p:boardService-ref="boardServiceImpl"></bean>
+	
+	<bean class="com.koreait.springmvc0714.controller.board.DetailController"
+	name="detailController"
+	p:boardService-ref="boardServiceImpl"></bean>
+	
+	<bean class="com.koreait.springmvc0714.controller.board.UpdateController"
+	name="updateController"
+	p:boardService-ref="boardServiceImpl"></bean>
+	
+	<bean class="com.koreait.springmvc0714.controller.board.DeleteController"
+	name="deleteController"
+	p:boardService-ref="boardServiceImpl"></bean>
+	
+	
+	<!-- 핸들러 매핑 -->
+	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping" 
+	p:alwaysUseFullPath="true"
+	id="handlerMapping">
+		<property name="mappings">
+			<props>
+				<prop key="/board/list">listController</prop>
+				<prop key="/board/regist">registController</prop>
+				<prop key="/board/detail">detailController</prop>
+				<prop key="/board/update">updateController</prop>
+				<prop key="/board/del">deleteController</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<!-- view resolver -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" 
+	id="viewResolver" 
+	p:prefix="/"
+	p:suffix=".jsp"></bean>
+</beans>
